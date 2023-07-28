@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Consulta API Aneel
+{% endblock %}
+
+{% block main %}
+
+<p>Selecione o mês e ano da referencia de dados importadas da Aneel para a visualização:</p>
+<form action="/display" method="GET">
+    <label for="monthYear">Mês e Ano:</label>
+    <input type="month" id="monthYear" name="monthYear"  required>
+    <br>
+    <button type="submit">Visualizar</button>
+</form>
+
+{% endblock %}

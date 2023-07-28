@@ -1,0 +1,111 @@
+
+{% extends "layout.html" %}
+
+{% block extraLinks %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block title %}
+    Visualização de dados
+{% endblock %}
+
+{% block main %}
+    
+    <h1>Dados Importados Aneel</h1>
+    
+    <h2>Período: {{month}}/{{year}}</h2>
+
+    <div class="d-flex justify-content-around align-items-center">
+        <canvas id="barChartUF" width="600" ></canvas>
+        <canvas id="pieChartCC" width="300" ></canvas>
+    </div>
+
+    
+    
+    <script>
+        // Carregar dados do arquivo selecionado
+        // Processar os dados conforme necessário
+        
+        // Exemplo de criação de gráficos com charts.js
+        var ctxBar = document.getElementById('barChartUF').getContext('2d');
+        var barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: {{ graficoUF['labels'] | safe}},
+                datasets: [{
+                    label: 'Total de Empreendimentos',
+                    data: {{graficoUF['values'] | safe}},
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Relação dos empreendimentos de geração distribuída por Estado'
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+
+        var ctxPie = document.getElementById('pieChartCC').getContext('2d');
+        var pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: {{ graficoClasseConsumo['labels'] | safe}},
+                datasets: [{
+                    label: 'Classe de Consumo',
+                    data: {{ graficoClasseConsumo['values'] | safe}},
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Relação dos empreendimentos de geração distribuída por Classe de Consumo'
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function(previousValue, currentValue) {
+                                return previousValue + currentValue;
+                            });
+                            var valor = dataset.data[tooltipItem.index];
+                            var percentual = ((valor / total) * 100).toFixed(2);
+                            return dataset.label + ': ' + valor + ' (' + percentual + '%)';
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+
+        
+    </script>
+    
+    <br>
+    
+    <a href="/">Voltar</a>
+
+
+{% endblock %}

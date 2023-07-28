@@ -1,0 +1,18 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Consulta API Aneel
+{% endblock %}
+
+{% block main %}
+
+<p>Selecione o mês e ano da referencia de dados para importação de dados da Aneel:</p>
+<form action="/import" method="POST">
+    <label for="monthYear">Mês e Ano:</label>
+    <input type="month" id="monthYear" name="monthYear" required>
+    <br>
+    <button type="submit">Importar</button>
+</form>
+
+{% endblock %}
